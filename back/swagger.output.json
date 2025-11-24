@@ -1,0 +1,170 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Club de Rol",
+    "description": "API para gestión de jugadores y juegos de rol",
+    "version": "1.0.0"
+  },
+  "host": "localhost:2025",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/usuarios/": {
+      "post": {
+        "description": "Registrar un nuevo jugador",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": { "example": "Carlos" },
+                "email": { "example": "carlos@example.com" },
+                "password": { "example": "PasswordSegura123!" },
+                "passwordConfirm": { "example": "PasswordSegura123!" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Jugador registrado con éxito" },
+          "400": { "description": "Datos inválidos o usuario ya existe" },
+          "500": { "description": "Error del servidor" }
+        }
+      }
+    },
+    "/api/usuarios/login": {
+      "post": {
+        "description": "Iniciar sesión y obtener token",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": { "example": "carlos@example.com" },
+                "password": { "example": "PasswordSegura123!" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Login exitoso (retorna token)" },
+          "400": { "description": "Credenciales inválidas" },
+          "500": { "description": "Error del servidor" }
+        }
+      }
+    },
+    "/api/juegos/": {
+      "get": {
+        "description": "Obtener lista de juegos (permite filtros por query params)",
+        "parameters": [
+            { "name": "nombre", "in": "query", "type": "string" },
+            { "name": "editorial", "in": "query", "type": "string" },
+            { "name": "categoria", "in": "query", "type": "string" },
+            { "name": "mayorQue", "in": "query", "type": "number" },
+            { "name": "menorQue", "in": "query", "type": "number" }
+        ],
+        "responses": {
+          "200": { "description": "OK" }
+        }
+      },
+      "post": {
+        "description": "Crear un nuevo juego",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": { "example": "Dungeons & Dragons" },
+                "editorial": { "example": "Wizards of the Coast" },
+                "precio": { "example": 50000 },
+                "year": { "example": 2014 },
+                "categoria": { "example": "Rol de mesa" },
+                "imagen": { "example": "https://imagen.com/dnd.jpg" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Datos inválidos" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/juegos/{id}": {
+      "get": {
+        "description": "Obtener un juego por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" }
+        }
+      },
+      "delete": {
+        "description": "Eliminar un juego (Soft Delete)",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "put": {
+        "description": "Reemplazar un juego completo",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": { "example": "Nuevo Nombre" },
+                "editorial": { "example": "Nueva Editorial" },
+                "precio": { "example": 60000 },
+                "year": { "example": 2025 },
+                "categoria": { "example": "Nueva Categoria" },
+                "imagen": { "example": "https://imagen.com/nueva.jpg" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "patch": {
+        "description": "Actualizar parcialmente un juego",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "precio": { "example": 45000 }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    }
+  }
+}
