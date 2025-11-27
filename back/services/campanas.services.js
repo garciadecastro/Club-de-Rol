@@ -1,9 +1,11 @@
 import { ObjectId } from "mongodb"
-import { db } from "../server.js"
+import { getDB } from "./database.service.js"
+
+const db = {
+    collection: (name) => getDB().collection(name)
+}
 
 export async function getCampanas(userId) {
-    // REQUISITO CLAVE: Filtramos por 'creador_id' para que sea privado
-    // Solo devolvemos las campañas que pertenecen al usuario logueado
     return db.collection("campanas")
         .find({ creador_id: new ObjectId(userId), eliminado: { $ne: true } })
         .toArray()
@@ -14,23 +16,30 @@ export async function getCampanaById(id) {
 }
 
 export async function crearCampana(campana) {
-    // Aseguramos que el creador_id sea un ObjectId
     const nuevaCampana = {
         ...campana,
         creador_id: new ObjectId(campana.creador_id),
         fecha_creacion: new Date(),
         eliminado: false
     }
-    return db.collection("campanas").insertOne(nuevaCampana)
+
+    // 1) Insertamos
+    const resultado = await db.collection("campanas").insertOne(nuevaCampana)
+
+    // 2) Devolvemos la campaña COMPLETA
+    return {
+        _id: resultado.insertedId,
+        ...nuevaCampana
+    }
 }
 
 export async function editarCampana(id, campana) {
-    // Eliminamos _id para no intentar actualizarlo (Mongo no deja)
     const { _id, ...datos } = campana
-    return db.collection("campanas").updateOne({ _id: new ObjectId(id) }, { $set: datos })
+    return db.collection("campanas")
+        .updateOne({ _id: new ObjectId(id) }, { $set: datos })
 }
 
 export function borrarCampana(id) {
-    // Soft Delete
-    return db.collection("campanas").updateOne({ _id: new ObjectId(id) }, { $set: { eliminado: true } })
+    return db.collection("campanas")
+        .updateOne({ _id: new ObjectId(id) }, { $set: { eliminado: true } })
 }

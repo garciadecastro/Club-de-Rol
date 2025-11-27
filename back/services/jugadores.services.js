@@ -1,8 +1,13 @@
 import bcrypt from 'bcrypt'
 import { createToken } from "./token.services.js"
-// Importamos la conexión compartida para no romper el servidor con múltiples conexiones
-import { db } from "../server.js"
+// CAMBIO: Importamos desde el archivo independiente para romper el círculo
+import { getDB } from "./database.service.js"
 import jwt from 'jsonwebtoken'
+
+// Truco para mantener el resto del código igual
+const db = {
+    collection: (name) => getDB().collection(name)
+}
 
 export async function registrar(jugador){
     // Verificamos si ya existe el email en la colección 'jugadores'

@@ -1,6 +1,11 @@
 import { ObjectId } from "mongodb"
-// Importamos la conexión que ya abrimos en server.js para no duplicarla
-import { db } from "../server.js"
+// CAMBIO: Importamos desde el archivo independiente para romper el círculo
+import { getDB } from "./database.service.js"
+
+// Truco para mantener el resto del código igual
+const db = {
+    collection: (name) => getDB().collection(name)
+}
 
 export async function getJuegos( filter = {} ) {
     // Inicializamos el filtro para excluir los eliminados (Soft Delete)

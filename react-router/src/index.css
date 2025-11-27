@@ -1,1 +1,36 @@
 @import "tailwindcss";
+@import "tailwindcss";
+
+/* Configuración Base Neomedieval */
+@theme {
+  --color-dungeon-dark: #0f172a; /* Azul noche muy oscuro */
+  --color-dungeon-light: #1e293b; /* Azul grisáceo para tarjetas */
+  --color-gold-500: #d4af37;      /* Dorado clásico */
+  --color-gold-600: #b4941f;      /* Dorado oscuro */
+  --color-parchment: #e2e8f0;     /* Blanco hueso/pergamino */
+}
+
+/* Aplicamos el tema a todo el cuerpo de la web */
+body {
+  background-color: var(--color-dungeon-dark);
+  color: var(--color-parchment);
+  font-family: 'Cinzel', serif; /* Si no carga, usará serif por defecto */
+  /* Patrón de fondo sutil (opcional) */
+  background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  min-height: 100vh;
+}
+
+/* Estilos para scrollbar oscuro */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a; 
+}
+::-webkit-scrollbar-thumb {
+  background: #334155; 
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569; 
+}

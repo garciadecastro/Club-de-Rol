@@ -1,6 +1,12 @@
 import jwt from 'jsonwebtoken'
 import { ObjectId } from "mongodb"
-import { db } from "../server.js"
+// CAMBIO: Importamos desde el archivo independiente para romper el círculo
+import { getDB } from "./database.service.js"
+
+// Truco para mantener el resto del código igual
+const db = {
+    collection: (name) => getDB().collection(name)
+}
 
 const SECRET_KEY = process.env.JWT_SECRET || "clave_secreta_rolera"
 
