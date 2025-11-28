@@ -1,5 +1,10 @@
+//Archivo: back/views/juegos.views.js
 import { createPage } from "../pages/utils.js";
 
+/**
+ * Genera la página con la lista de todos los juegos.
+ * Incluye enlaces para Ver Detalle, Editar y Borrar cada uno.
+ */
 export function createJuegosListPage(juegos) {
   let html = "<h1>Lista de Juegos</h1>";
   html += "<ul>";
@@ -17,6 +22,9 @@ export function createJuegosListPage(juegos) {
   return createPage("Lista de Juegos", html);
 }
 
+/**
+ * Muestra el detalle completo de un juego específico.
+ */
 export function createDetailPage(juego) {
   let html = "";
   html += "<ul>";
@@ -34,6 +42,9 @@ export function createDetailPage(juego) {
   return createPage(juego.nombre, html);
 }
 
+/**
+ * Página de error simple cuando no existe el juego.
+ */
 export function errorPage() {
   let html = "";
   html += "<h2>No se encontró el juego buscado</h2>";
@@ -41,6 +52,10 @@ export function errorPage() {
   return createPage("Error 404", html);
 }
 
+/**
+ * Formulario HTML para crear un juego nuevo.
+ * Envía los datos por POST a /juegos/nuevo.
+ */
 export function formularioNuevoJuego(){
   let html = "<form action='/juegos/nuevo' method='post' >";
   html += "<div><label>Nombre:</label> <input type='text' name='nombre' required /></div>";
@@ -56,6 +71,9 @@ export function formularioNuevoJuego(){
   return createPage("Nuevo Juego", html);
 }
 
+/**
+ * Formulario pre-llenado para editar un juego existente.
+ */
 export function formularioEditarJuego(juego){
   let html = `<form action='/juegos/editar/${juego._id}' method='post' >`;
   html += `<div><label>Nombre:</label> <input type='text' name='nombre' value="${juego.nombre}" required /></div>`;
@@ -71,6 +89,9 @@ export function formularioEditarJuego(juego){
   return createPage("Editar Juego", html);
 }
 
+/**
+ * Pantalla de confirmación antes de borrar.
+ */
 export function formularioBorrarJuego(juego){
   let html = `<form action='/juegos/borrar/${juego._id}' method='post' >`;
   html += `<h2>¿Estás seguro que quieres borrar este juego?</h2>`;
@@ -82,6 +103,9 @@ export function formularioBorrarJuego(juego){
   return createPage("Borrar Juego", html);
 }
 
+/**
+ * Mensaje de éxito tras eliminar.
+ */
 export function borrarExito(){
   let html = ""
   html += "<p>Juego borrado correctamente</p>"

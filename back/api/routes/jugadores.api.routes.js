@@ -1,19 +1,22 @@
-import express from "express"
-import * as controllers from "../controllers/jugadores.api.controller.js"
-// Importamos las validaciones (que crearemos enseguida)
-import { validateJugador, validateLogin } from "../../middlewares/jugadores.validate.js"
+//Archivo: back/api/routes/jugadores.api.routes.js
+import express from "express";
+import * as controllers from "../controllers/jugadores.api.controller.js";
+import { validateJugador, validateLogin } from "../../middlewares/jugadores.validate.js";
+import { validateToken } from "../../middlewares/token.validate.js";
 
-const router = express.Router()
+const router = express.Router();
 
-// POST /api/jugadores -> Registra un nuevo jugador
-router.post("/", [validateJugador], controllers.registrar)
+// Rutas Públicas (Registro, Login, Recuperación)
+router.post("/", validateJugador, controllers.registrar);
+router.post("/login", validateLogin, controllers.login);
+router.post("/recuperar-cuenta", controllers.recuperarPassword); 
+router.post("/restablecer-contrasenia", controllers.restablecerPassword);
 
-// POST /api/jugadores/login -> Inicia sesión
-router.post("/login", [validateLogin], controllers.login)
+// Ruta para obtener todos los jugadores (La Taberna).
+router.get("/publicos", controllers.getJugadoresPublicos);
 
-// Estas las dejo comentadas porque aún no tenemos la lógica en el controlador, 
-// pero respeto la estructura del profesor por si quieres añadirlas luego:
-// router.post("/recuperar-cuenta", controllers.recuperarCuenta)
-// router.post("/restablecer-contrasenia", controllers.restablecerContrasenia)
+// Rutas protegidas
+router.put("/:id", [validateToken], controllers.actualizar);
+router.delete("/:id", [validateToken], controllers.eliminar);
 
-export default router
+export default router;

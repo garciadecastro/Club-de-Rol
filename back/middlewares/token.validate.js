@@ -1,20 +1,28 @@
+//Archivo: back/middlewares/token.validate.js
 import * as tokenService from '../services/token.services.js'
 
+/**
+ * Middleware de AUTORIZACIÓN.
+ * Verifica el token enviado en los headers y, si es válido,
+ */
 export async function validateToken(req, res, next){
     try {        
-        const auth = req.headers["authorization"] // Busca el header 'Authorization'
-        if( !auth ) return res.status(401).json({ message: "Token no encontrado" })
+        const auth = req.headers["authorization"]
+        if (!auth) return res.status(401).json({ message: "Token no encontrado" })
 
-        const [ bearer, token ] = auth.split(" ") // Separa "Bearer" del código largo
+        const [bearer, token] = auth.split(" ")
 
-        if( bearer != "Bearer" && !token ) return res.status(401).json({ message: "Formato de token invalido" })
+        
+        // Si no dice "Bearer" O si no hay token, es un formato inválido.
+        if (bearer !== "Bearer" || !token) {
+            return res.status(401).json({ message: "Formato de token inválido" })
+        }
 
-        // Llama al servicio para verificar si el token es real y no ha expirado
         const usuario = await tokenService.validateToken(token)
 
-        if( !usuario ) return res.status(401).json({ message: "Token invalido" })
+        if (!usuario) return res.status(401).json({ message: "Token inválido" })
 
-        req.session = usuario // Guarda los datos del usuario en la petición para usarlo luego
+        req.session = usuario
 
         next()
     } catch (error) {

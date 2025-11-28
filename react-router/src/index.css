@@ -10,17 +10,16 @@
   --color-parchment: #e2e8f0;     /* Blanco hueso/pergamino */
 }
 
-/* Aplicamos el tema a todo el cuerpo de la web */
+
 body {
   background-color: var(--color-dungeon-dark);
   color: var(--color-parchment);
-  font-family: 'Cinzel', serif; /* Si no carga, usará serif por defecto */
-  /* Patrón de fondo sutil (opcional) */
+  font-family: 'Cinzel', serif;
   background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
   min-height: 100vh;
 }
 
-/* Estilos para scrollbar oscuro */
+/* Estilos para scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }

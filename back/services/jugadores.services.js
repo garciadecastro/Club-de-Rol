@@ -1,69 +1,98 @@
-import bcrypt from 'bcrypt'
-import { createToken } from "./token.services.js"
-// CAMBIO: Importamos desde el archivo independiente para romper el círculo
-import { getDB } from "./database.service.js"
-import jwt from 'jsonwebtoken'
+//Archivo: back/services/jugadores.services.js
+import bcrypt from "bcrypt";
+import { createToken } from "./token.services.js";
+import { getDB } from "./database.service.js";
+import { ObjectId } from "mongodb";
+import jwt from "jsonwebtoken";
 
-// Truco para mantener el resto del código igual
 const db = {
     collection: (name) => getDB().collection(name)
+};
+
+/**
+ * Registra un nuevo usuario en el sistema.
+ */
+export async function registrar(jugador) {
+    // Verificamos si el email ya existe para evitar duplicados
+    const existe = await db.collection("jugadores").findOne({ email: jugador.email });
+    if (existe) throw new Error("El email ya está registrado");
+
+    const nuevo = {
+        nombre: jugador.nombre,
+        email: jugador.email,
+        // Encriptamos la contraseña
+        // Nunca se guarda texto plano.
+        password: await bcrypt.hash(jugador.password, 10),
+        juegosFavoritos: []
+    };
+
+    await db.collection("jugadores").insertOne(nuevo);
+
+    // Devolvemos el objeto usuario SIN la contraseña (buena práctica de seguridad)
+    return { ...nuevo, password: undefined };
 }
 
-export async function registrar(jugador){
-    // Verificamos si ya existe el email en la colección 'jugadores'
-    const existe = await db.collection("jugadores").findOne({email: jugador.email})
-    
-    if( existe ) throw new Error("No se pudo registrar el jugador (El email ya existe)")
+/**
+ * Realiza el Login del usuario.
+ * 1. Busca el usuario.
+ * 2. Compara la contraseña encriptada.
+ * 3. Genera el Token JWT.
+ */
+export async function login(data) {
+    const jugador = await db.collection("jugadores").findOne({ email: data.email });
+    if (!jugador) throw new Error("Credenciales inválidas");
 
-    // Preparamos el objeto nuevo, quitando la password plana y confirmación
-    const nuevoJugador = { 
-        ...jugador, 
-        password: undefined, 
-        passwordConfirm: undefined,
-        juegosFavoritos: [] // Inicializamos el array de favoritos
-    }
+    // Comparamos la password que viene del front con el hash de la BD
+    const ok = await bcrypt.compare(data.password, jugador.password);
+    if (!ok) throw new Error("Credenciales inválidas");
 
-    // Encriptamos la contraseña
-    nuevoJugador.password = await bcrypt.hash(jugador.password, 10)
+    // Generamos el token de sesión llamando al servicio de tokens
+    const token = await createToken(jugador);
 
-    // Guardamos en Mongo
-    await db.collection("jugadores").insertOne(nuevoJugador)
-
-    // Devolvemos el usuario sin la contraseña encriptada
-    return {...nuevoJugador, password: undefined}
+    return { ...jugador, password: undefined, token };
 }
 
-export async function login(credenciales){
-    // Buscamos el usuario
-    const jugador = await db.collection("jugadores").findOne({email: credenciales.email})
-    
-    if( !jugador ) throw new Error("Credenciales inválidas")
+/**
+ * Actualiza los datos del jugador.
+ * Si el usuario envía una nueva contraseña, la volvemos a encriptar.
+ */
+export async function actualizarJugador(id, datos) {
+    const col = db.collection("jugadores");
+    const jugador = await col.findOne({ _id: new ObjectId(id) });
+    if (!jugador) throw new Error("Jugador no encontrado");
 
-    // ⚠️ CORRECCIÓN DE SEGURIDAD: Validamos que la contraseña coincida
-    const esValida = await bcrypt.compare(credenciales.password, jugador.password)
+    const set = {};
+    if (datos.nombre) set.nombre = datos.nombre;
+    if (datos.email) set.email = datos.email;
     
-    if( !esValida ) throw new Error("Credenciales inválidas")
+    // Si hay cambio de contraseña, se hashea de nuevo
+    if (datos.password) set.password = await bcrypt.hash(datos.password, 10);
 
-    // Generamos el token usando tu servicio de tokens
-    const token = await createToken(jugador)
-    
-    // Retornamos los datos limpios + el token
-    return { ...jugador, password: undefined, passwordConfirm: undefined, token }
+    await col.updateOne({ _id: new ObjectId(id) }, { $set: set });
+
+    return { ...jugador, ...set, password: undefined };
 }
 
-/* Dejo esta función preparada basada en el modelo del profesor,
-   por si descomentas la ruta de recuperar contraseña en el futuro.
-*/
-export async function restablecerContrasenia(tokenEmail, password){
-    const payload = jwt.verify(tokenEmail, "RECUPERAR")
-    const email = payload.email
+/**
+ * Elimina la cuenta del jugador permanentemente.
+ */
+export async function eliminarJugador(id) {
+    const col = db.collection("jugadores");
+    const jugador = await col.findOne({ _id: new ObjectId(id) });
+    if (!jugador) throw new Error("Jugador no encontrado");
 
-    const existe = await db.collection("jugadores").findOne({email: email})
-    if( !existe ) throw new Error("No se pudo restablecer")
+    await col.deleteOne({ _id: new ObjectId(id) });
 
-    await db.collection("jugadores").updateOne({email: email}, {
-        $set: { password: await bcrypt.hash(password, 10) }
-    })
+    return true;
+}
 
-    return "OK"
+/**
+ * Obtiene la lista de todos los jugadores del club.
+ * Excluye campos sensibles para el listado público.
+ */
+export async function getJugadoresPublicos() {
+    return db.collection("jugadores")
+        .find({}) 
+        .project({ password: 0, passwordConfirm: 0, juegosFavoritos: 0 }) 
+        .toArray()
 }

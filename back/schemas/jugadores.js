@@ -1,5 +1,10 @@
+//Archivo: back/schemas/jugadores.js
 import yup from 'yup'
 
+/**
+ * Esquema de validación para el REGISTRO de usuarios.
+ * Incluye reglas complejas para la contraseña (regex).
+ */
 export const jugadoresSchema = yup.object({
     // Agrego nombre porque tu controlador lo pide para registrar
     nombre: yup.string().required("El nombre es un campo requerido").min(3, "El nombre debe tener al menos 3 caracteres"),
@@ -16,6 +21,9 @@ export const jugadoresSchema = yup.object({
     passwordConfirm: yup.string().oneOf([yup.ref("password")], "Las contraseñas deben ser iguales").required("La confirmación de contraseña es requerida")
 })
 
+/**
+ * Esquema simplificado solo para el LOGIN.
+ */
 export const loginSchema = yup.object({
     email: yup.string().email("Debe ser un mail valido").typeError("Debe ser un mail valido").required("El email es requerido"),
     password: yup.string().required("La contraseña es requerida")

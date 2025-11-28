@@ -1,5 +1,10 @@
+//Archivo: back/schemas/juegos.js
 import yup from 'yup'
 
+/**
+ * Esquema completo para la entidad Juegos.
+ * Valida tipos de datos (números para precio/año) y formatos (URL para imagen).
+ */
 export const juegosSchema = yup.object({
     nombre: yup.string().required("El nombre es un campo requerido").min(3, "El nombre como minimo debe tener 3 caracteres").max(50, "El nombre como maximo debe tener 50 caracteres"),
     

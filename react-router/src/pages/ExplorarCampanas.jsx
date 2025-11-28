@@ -1,64 +1,33 @@
-//Archivo: react-router/src/pages/MisCampanas.jsx
+//Archivo: react-router/src/pages/ExplorarCampanas.jsx
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useCampanas } from '../hooks/useCampanas'
+import { Link } from 'react-router-dom';
+import { useCampanasPublicas } from '../hooks/useCampanas' 
 
 /**
- * Página: Mis Campañas (Listado personal)
+ * Página: Mundo Abierto (Campañas Públicas)
  */
-const MisCampanas = () => {
-    const { campanas, loading, error } = useCampanas()
+const ExplorarCampanas = () => {
+    
+    const { campanas, loading, error } = useCampanasPublicas() 
+    const listaSegura = Array.isArray(campanas) ? campanas : []
 
-    if (loading) return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] text-amber-500 animate-pulse gap-4">
-            <svg className="w-12 h-12 animate-spin" fill="none" viewBox="0 0 24 24"><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            <span className="font-serif text-xl tracking-widest uppercase">Cargando crónicas...</span>
-        </div>
-    )
-
-    if (error) return (
-        <div className="p-8 text-center bg-red-900/20 border border-red-500/50 rounded-lg text-red-400 max-w-2xl mx-auto mt-10">
-            <h2 className="text-xl font-bold mb-2">Error Arcano</h2>
-            <p>{error}</p>
-        </div>
-    )
+    if (loading) return <div className="text-amber-500 text-center p-10">Buscando aventuras en el horizonte...</div>
+    if (error) return <div className="text-red-400 text-center p-10">Error al contactar con el oráculo: {error}</div>
 
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-8 animate-fade-in">
-            
-            {/* CABECERA */}
-            <div className="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-amber-900/30 pb-4 gap-4">
-                <div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-amber-500 font-serif tracking-tight drop-shadow-sm">
-                        Mis Campañas
-                    </h1>
-                    <p className="text-slate-400 mt-2 font-serif italic">
-                        Las historias donde tú eres el Dungeon Master.
-                    </p>
-                </div>
-                
-                <Link
-                    to="/campanas/nueva"
-                    className="px-6 py-3 bg-gradient-to-r from-amber-700 to-amber-600 text-amber-50 font-bold rounded-lg shadow-lg hover:shadow-amber-900/40 hover:from-amber-600 hover:to-amber-500 transition-all flex items-center gap-2 transform hover:-translate-y-0.5 border border-amber-500/30"
-                >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
-                    Nueva Aventura
-                </Link>
-            </div>
+            <h1 className="text-4xl font-bold text-amber-500 font-serif mb-6 border-b border-amber-900/30 pb-4">
+                🌍 Mundo Abierto
+            </h1>
+            <p className="text-slate-400 mb-8 italic">Explora las crónicas de aventuras activas de otros Dungeon Masters.</p>
 
-            {/* LISTADO */}
-            {(!campanas || campanas.length === 0) ? (
+            {listaSegura.length === 0 ? (
                 <div className="text-center py-20 bg-slate-900/50 rounded-xl border-2 border-dashed border-slate-700">
-                    <div className="text-6xl mb-4">📜</div>
-                    <h3 className="text-2xl font-bold text-slate-300 font-serif mb-2">Tu grimorio está vacío</h3>
-                    <p className="text-slate-500 mb-6">Aún no has escrito ninguna leyenda.</p>
-                    <Link to="/campanas/nueva" className="text-amber-500 hover:text-amber-400 font-bold hover:underline">
-                        Inicia tu primera campaña aquí
-                    </Link>
+                    <p className="text-slate-500 text-lg font-serif">Nadie ha iniciado una aventura pública aún.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {campanas.map(campana => (
+                    {listaSegura.map(campana => (
                         <div
                             key={campana._id}
                             className="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg hover:shadow-[0_0_25px_rgba(245,158,11,0.15)] hover:border-amber-600/50 transition-all group flex flex-col h-full transform hover:-translate-y-1"
@@ -69,10 +38,7 @@ const MisCampanas = () => {
                                     <img
                                         src={campana.imagen}
                                         alt={campana.titulo}
-                                        onError={(e) => {
-                                            e.target.onerror = null; 
-                                            e.target.src = "https://images.unsplash.com/photo-1614885527201-d78e74c46a36?q=80&w=2070&auto=format&fit=crop"; // Fallback genérico bonito
-                                        }} 
+                                        onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1642479634795-364234027725?q=80&w=2070&auto=format&fit=crop"; }}
                                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                                     />
                                 ) : (
@@ -82,7 +48,6 @@ const MisCampanas = () => {
                                     </div>
                                 )}
 
-                                {/* Badge Sistema */}
                                 <div className="absolute top-3 right-3">
                                     <span className="bg-slate-900/90 backdrop-blur text-amber-500 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border border-amber-900/50 shadow-sm">
                                         {campana.sistema}
@@ -104,8 +69,8 @@ const MisCampanas = () => {
                                     to={`/campanas/${campana._id}`}
                                     className="block w-full text-center py-2.5 bg-slate-800 hover:bg-amber-900/30 text-amber-500 border border-slate-700 hover:border-amber-700/50 text-sm font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
                                 >
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                                    Gestionar Campaña
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12h-6m-4 0h16" /></svg>
+                                    Ver Detalle
                                 </Link>
                             </div>
 
@@ -117,4 +82,4 @@ const MisCampanas = () => {
     )
 }
 
-export default MisCampanas
+export default ExplorarCampanas;

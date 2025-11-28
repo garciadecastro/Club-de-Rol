@@ -1,16 +1,26 @@
+//Archivo: react-router/src/services/auth.services.js
 import { call } from "./api.services";
 
-// LOGIN
+/**
+ * Inicia sesión enviando email y contraseña al backend.
+ * @param {object} credenciales - Objeto con { email, password }
+ */
 export function authLogin(credenciales) {
     return call({ uri: 'jugadores/login', method: "POST", body: credenciales })
 }
 
-// REGISTRO
+/**
+ * Registra un nuevo usuario.
+ * @param {object} credenciales - Objeto con { nombre, email, password, passwordConfirm }
+ */
 export function authRegister(credenciales) {
     return call({ uri: 'jugadores', method: "POST", body: credenciales })
 }
 
-// RECUPERAR CUENTA (opcional)
+/**
+ * Solicita un correo de recuperación.
+ * Requiere que el backend tenga la ruta POST /api/jugadores/recuperar-cuenta creada.
+ */
 export function recuperarCuenta(email) {
     return call({
         uri: 'jugadores/recuperar-cuenta',
@@ -19,7 +29,9 @@ export function recuperarCuenta(email) {
     })
 }
 
-// RESTABLECER CONTRASEÑA (opcional)
+/**
+ * Envía la nueva contraseña.
+ */
 export function restablecerContrasenia(email, password) {
     return call({
         uri: 'jugadores/restablecer-contrasenia',

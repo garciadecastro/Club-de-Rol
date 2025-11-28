@@ -1,7 +1,12 @@
+//Archivo: react-router/src/hooks/useJuegos.jsx
 import { useEffect, useState } from "react";
 import { getJuegos, getJuegoById } from "../services/juegos.services";
+import { getJugadoresPublicos } from "../services/jugadores.services"; 
 
-// HOOK 1 — Lista de juegos
+
+/**
+ * Hook para obtener la biblioteca completa de juegos disponibles.
+ */
 export function useJuegos() {
     const [juegos, setJuegos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -29,7 +34,9 @@ export function useJuegos() {
     return { juegos, loading, error };
 }
 
-// HOOK 2 — Juego individual
+/**
+ * Hook para obtener un solo juego por su ID.
+ */
 export function useJuego(id) {
     const [juego, setJuego] = useState({});
     const [loading, setLoading] = useState(false);
@@ -58,4 +65,43 @@ export function useJuego(id) {
     }, [id]);
 
     return { juego, loading, error };
+}
+
+
+/**
+ * Hook para obtener la lista pública de todos los jugadores.
+ */
+export function useJugadoresPublicos() {
+    const [jugadores, setJugadores] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let isCanceled = false;
+        
+        async function loadData() {
+            try {
+                // Llama al servicio que consulta el endpoint /api/jugadores/publicos
+                const data = await getJugadoresPublicos(); 
+                
+                if (!isCanceled) {
+                    setJugadores(data); 
+                }
+            } catch (err) {
+                if (!isCanceled) {
+                    setError(err.message);
+                }
+            } finally {
+                if (!isCanceled) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadData();
+
+        return () => { isCanceled = true };
+    }, []);
+
+    return { jugadores, loading, error };
 }

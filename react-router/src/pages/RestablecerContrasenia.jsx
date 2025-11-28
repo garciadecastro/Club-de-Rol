@@ -8,16 +8,13 @@ const RestablecerContrasenia = () => {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState("");
 
-    const params = useParams();
-    const email = params.email; // Placeholder, depende de tu backend
+    const { token } = useParams();  
 
     const handleRestablecer = () => {
         setError("");
 
-        restablecerContrasenia(email, pass)
-            .then(() => {
-                setSuccess(true);
-            })
+        restablecerContrasenia(token, pass) 
+            .then(() => setSuccess(true))
             .catch(() => {
                 setError("No se pudo restablecer. El enlace puede haber expirado.");
             });
