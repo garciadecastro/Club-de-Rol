@@ -17,8 +17,19 @@ router.get("/publicas", controllers.getCampanasPublicas)
 // ------------------------------------------
 router.get("/", [validateToken], controllers.getCampanas)
 router.get("/:id", [validateToken, validateId], controllers.getCampanaById)
+
+// Creación y Edición básica
 router.post("/", [validateToken, validateCampana], controllers.createCampana)
 router.put("/:id", [validateToken, validateId, validateCampana], controllers.editarCampana)
+
+// Gestión de Jugadores (NUEVAS RUTAS)
+// POST para invitar (el ID del jugador va en el body)
+router.post("/:id/invitar", [validateToken, validateId], controllers.invitarJugador)
+
+// DELETE para expulsar (el ID del jugador va en la URL para ser RESTful)
+router.delete("/:id/jugadores/:idJugador", [validateToken, validateId], controllers.expulsarJugador)
+
+// Borrado de campaña
 router.delete("/:id", [validateToken, validateId], controllers.deleteCampana)
 
 export default router

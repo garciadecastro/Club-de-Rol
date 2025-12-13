@@ -7,7 +7,6 @@ import * as services from "../../services/campanas.services.js"
  * @param {object} res - La respuesta que enviará la lista de campañas.
  */
 export function getCampanas(req, res){
-    // Saco el ID del usuario de la sesión para filtrar solo sus campañas
     const usuarioId = req.session._id
     
     services.getCampanas(usuarioId)
@@ -15,29 +14,27 @@ export function getCampanas(req, res){
         .catch( err => res.status(500).json({message: err.message || err}) )
 }
 
-
+/**
+ * Obtiene campañas públicas (Mundo Abierto).
+ */
 export function getCampanasPublicas(req, res) {
     services.getCampanasPublicas()
         .then(campanas => res.status(200).json(campanas))
         .catch(err => res.status(500).json({ message: err.message || err }))
 }
 
-
 /**
- * Busca una campaña específica por ID y verifica permisos.
- * @param {object} req - La petición con el ID en los parámetros.
- * @param {object} res - La respuesta con la campaña encontrada.
+ * Busca una campaña específica por ID.
+ * MODIFICADO: Se eliminó la restricción estricta de "solo creador".
+ * Ahora permite ver el detalle a cualquier usuario logueado.
  */
 export function getCampanaById(req, res){
     const id = req.params.id
     services.getCampanaById(id)
         .then( campana => {
             if(campana){
-                // Verifico si el usuario que pide ver esto es realmente el dueño
-                if(campana.creador_id.toString() !== req.session._id.toString()){
-
-                    return res.status(403).json({message: "No tienes permiso para ver esta campaña"})
-                }
+                // ANTES: if(campana.creador_id !== req.session._id) return 403...
+                // AHORA: Permitimos el paso. La seguridad visual (botones) la maneja el Frontend.
                 res.status(200).json(campana)
             } else {
                 res.status(404).json({message: "Campaña no encontrada"})
@@ -48,8 +45,7 @@ export function getCampanaById(req, res){
 
 /**
  * Crea una nueva campaña con los datos recibidos.
- * @param {object} req - El body contiene los datos del formulario.
- * @param {object} res - Devuelve la campaña creada.
+ * MODIFICADO: Captura explícitamente juego_id y jugadores del formulario.
  */
 export function createCampana(req, res){
     const campana = {
@@ -57,7 +53,9 @@ export function createCampana(req, res){
         sistema: req.body.sistema,
         descripcion: req.body.descripcion,
         imagen: req.body.imagen,
-        // Asigno el creador automáticamente usando el token de sesión
+        // NUEVOS CAMPOS:
+        juego_id: req.body.juego_id, 
+        jugadores: req.body.jugadores || [], // Array de IDs (opcional, default vacío)
         creador_id: req.session._id 
     }
 
@@ -68,8 +66,6 @@ export function createCampana(req, res){
 
 /**
  * Edita una campaña existente.
- * @param {object} req - Petición con ID y nuevos datos.
- * @param {object} res - Respuesta de la actualización.
  */
 export function editarCampana(req, res){
     const id = req.params.id
@@ -81,9 +77,33 @@ export function editarCampana(req, res){
 }
 
 /**
- * Borra una campaña de la base de datos.
- * @param {object} req - Petición con el ID de la campaña a borrar.
- * @param {object} res - Mensaje de confirmación.
+ * NUEVO: Invita a un jugador a la campaña.
+ * Se espera el ID del jugador en el body (POST).
+ */
+export function invitarJugador(req, res) {
+    const idCampana = req.params.id
+    const idJugador = req.body.idJugador 
+
+    services.agregarJugador(idCampana, idJugador)
+        .then((resultado) => res.status(200).json(resultado))
+        .catch((err) => res.status(400).json({ message: err.message || err }))
+}
+
+/**
+ * NUEVO: Elimina a un jugador de la campaña.
+ * Se espera el ID del jugador en la URL (DELETE).
+ */
+export function expulsarJugador(req, res) {
+    const idCampana = req.params.id
+    const idJugador = req.params.idJugador 
+
+    services.quitarJugador(idCampana, idJugador)
+        .then(() => res.status(200).json({ message: "Jugador eliminado de la campaña" }))
+        .catch((err) => res.status(500).json({ message: err.message || err }))
+}
+
+/**
+ * Borra una campaña de la base de datos (Lógico).
  */
 export function deleteCampana(req, res){
     const id = req.params.id

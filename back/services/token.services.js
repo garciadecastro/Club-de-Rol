@@ -7,7 +7,8 @@ const db = {
     collection: (name) => getDB().collection(name)
 }
 
-const SECRET_KEY = process.env.JWT_SECRET || "clave_secreta_rolera"
+// CAMBIO: Definimos la clave directamente (Hardcoded) para no depender del .env
+const SECRET_KEY = "clave_secreta_rolera" 
 
 /**
  * Genera el token JWT.

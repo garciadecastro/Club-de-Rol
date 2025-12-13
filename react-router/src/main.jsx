@@ -1,4 +1,3 @@
-//Archivo: react-router/src/main.jsx
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -32,9 +31,10 @@ import JuegosEditar from './pages/JuegosEditar.jsx'
 import JuegosDetalle from './pages/JuegosDetalle.jsx'
 import EditarCampana from './pages/EditarCampana.jsx' 
 
-// --- PÁGINAS DE EXPLORACIÓN (NUEVAS) ---
-import ExplorarCampanas from './pages/ExplorarCampanas.jsx' // AGREGADO
-import ExplorarJugadores from './pages/ExplorarJugadores.jsx' // AGREGADO
+// --- PÁGINAS DE EXPLORACIÓN Y COMUNIDAD ---
+import ExplorarCampanas from './pages/ExplorarCampanas.jsx' 
+import ExplorarJugadores from './pages/ExplorarJugadores.jsx' 
+import PerfilPublico from './pages/PerfilPublico.jsx' // <--- IMPORTANTE: Importar la nueva página
 
 /**
  * Configuración de las Rutas (React Router DOM v6).
@@ -54,10 +54,13 @@ const router = createBrowserRouter([
 
       // --- RUTAS PRIVADAS (Requieren Login) ---
       
-      // Gestión de Perfil
+      // Gestión de Perfil Personal
       { path: "/perfil", element: <ProtectedRoute element={<Perfil />} /> },
       { path: "/perfil/editar", element: <ProtectedRoute element={<PerfilEditar />} /> },
-      { path: "/perfil/:id", element: <ProtectedRoute element={<Perfil />} /> }, // Se puede ver el perfil de otro jugador
+
+      // Perfil Público de Otros Jugadores (Hoja de Aventurero)
+      // Esta ruta coincide con el link en ExplorarJugadores (`/jugadores/${id}`)
+      { path: "/jugadores/:id", element: <ProtectedRoute element={<PerfilPublico />} /> },
 
       // Gestión de Campañas (CRUD)
       { path: "/campanas", element: <ProtectedRoute element={<MisCampanas />} /> },
@@ -72,8 +75,8 @@ const router = createBrowserRouter([
       { path: "/juegos/editar/:id", element: <ProtectedRoute element={<JuegosEditar />} /> }, 
 
       // --- RUTAS DE EXPLORACIÓN (Comunidad) ---
-      { path: "/explorar/campanas", element: <ProtectedRoute element={<ExplorarCampanas />} /> }, // AGREGADO
-      { path: "/explorar/jugadores", element: <ProtectedRoute element={<ExplorarJugadores />} /> }, // AGREGADO
+      { path: "/explorar/campanas", element: <ProtectedRoute element={<ExplorarCampanas />} /> }, 
+      { path: "/explorar/jugadores", element: <ProtectedRoute element={<ExplorarJugadores />} /> }, 
 
       // Salir
       { path: "/logout", element: <Logout /> }

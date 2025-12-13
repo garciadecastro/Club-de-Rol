@@ -1,27 +1,31 @@
-//Archivo: back/services/email.services.js
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
 
 const transport = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: "carlosgarciadecastro@gmail.com",
+        pass: "tmldbardnvgmncrr" // Tu App Password (sin espacios)
     }
 })
 
 export async function enviarMailRecuperacion(email){
     console.log("Intentando enviar email a: ", email)
     
-    const tokenEmail = jwt.sign({email}, process.env.JWT_SECRET, {expiresIn: "1h"})
+    // Usamos la clave "RECUPERAR" igual que el profesor
+    const tokenEmail = jwt.sign({email}, "RECUPERAR", {expiresIn: "1h"})
+
+    // URL hardcodeada a localhost
+    const url = `http://localhost:5173/restablecer-contrasenia/${tokenEmail}`
 
     const emailOptions = {
-        from: process.env.EMAIL_USER,
+        from: "carlosgarciadecastro@gmail.com",
         to: email,
         subject: "Recuperar contraseña - Club de Rol",
-        html: `<p>Click para recuperar tu cuenta:
-        <a href='${process.env.FRONTEND_URL}/restablecer-contrasenia/${tokenEmail}'>
-        Recuperar Contraseña</a></p>`
+        html: `<p>Haz click en el siguiente link para recuperar tu cuenta: <a href='${url}'>Recuperar Contraseña</a></p>`,
+        text: `Haz click en el siguiente link para recuperar tu cuenta: ${url}`
     }
 
     return transport.sendMail(emailOptions)

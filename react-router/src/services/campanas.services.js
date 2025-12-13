@@ -10,8 +10,7 @@ export function getCampanas() {
 }
 
 /**
- * NUEVO: Obtiene la lista de campañas públicas (Mundo Abierto).
- * Llama al endpoint que no requiere filtro de creador de la API.
+ * Obtiene la lista de campañas públicas (Mundo Abierto).
  */
 export function getCampanasPublicas() {
     return call({
@@ -31,7 +30,6 @@ export function getCampanaById(id) {
 /**
  * Crea una nueva campaña.
  * Llama a POST /api/campanas
- * @param {object} campana - Datos de la campaña (título, descripción, etc.)
  */
 export function createCampana(campana) {
     return call({ uri: 'campanas', method: 'POST', body: campana })
@@ -39,9 +37,9 @@ export function createCampana(campana) {
 
 /**
  * Edita una campaña existente.
- * Llama a PUT /api/campanas/:id
+ * CORRECCIÓN: Renombrado de 'editCampana' a 'editarCampana' para coincidir con el import.
  */
-export function editCampana(id, campana) {
+export function editarCampana(id, campana) {
     return call({ uri: 'campanas/' + id, method: 'PUT', body: campana })
 }
 
@@ -51,4 +49,31 @@ export function editCampana(id, campana) {
  */
 export function deleteCampana(id) {
     return call({ uri: 'campanas/' + id, method: 'DELETE' })
+}
+
+// ----------------------------------------------------
+// NUEVAS FUNCIONES (Las que faltaban y daban error)
+// ----------------------------------------------------
+
+/**
+ * Invita a un jugador a la campaña.
+ * Llama a POST /api/campanas/:id/invitar
+ */
+export function invitarJugador(idCampana, idJugador) {
+    return call({
+        uri: `campanas/${idCampana}/invitar`,
+        method: 'POST',
+        body: { idJugador }
+    })
+}
+
+/**
+ * Expulsa a un jugador de la campaña.
+ * Llama a DELETE /api/campanas/:id/jugadores/:idJugador
+ */
+export function expulsarJugador(idCampana, idJugador) {
+    return call({
+        uri: `campanas/${idCampana}/jugadores/${idJugador}`,
+        method: 'DELETE'
+    })
 }

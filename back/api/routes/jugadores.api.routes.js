@@ -15,8 +15,12 @@ router.post("/restablecer-contrasenia", controllers.restablecerPassword);
 // Ruta para obtener todos los jugadores (La Taberna).
 router.get("/publicos", controllers.getJugadoresPublicos);
 
-// Rutas protegidas
+// Rutas protegidas (Requieren Token)
 router.put("/:id", [validateToken], controllers.actualizar);
 router.delete("/:id", [validateToken], controllers.eliminar);
+
+// NUEVO: Ver perfil público de un jugador específico
+// Debe ir al final o después de "/publicos" para no confundir rutas
+router.get("/:id", [validateToken], controllers.getJugadorById);
 
 export default router;
