@@ -3,7 +3,6 @@ import yup from 'yup'
 
 /**
  * Esquema para las Partidas (sesiones de juego).
- * Versión corregida: la fecha se valida como string ISO para compatibilidad total.
  */
 export const partidaSchema = yup.object({
     titulo: yup.string()

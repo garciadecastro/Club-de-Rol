@@ -25,7 +25,7 @@ export function getCampanasPublicas(req, res) {
 
 /**
  * Busca una campaña específica por ID.
- * MODIFICADO: Se eliminó la restricción estricta de "solo creador".
+ * Se eliminó la restricción estricta de "solo creador".
  * Ahora permite ver el detalle a cualquier usuario logueado.
  */
 export function getCampanaById(req, res){
@@ -33,8 +33,7 @@ export function getCampanaById(req, res){
     services.getCampanaById(id)
         .then( campana => {
             if(campana){
-                // ANTES: if(campana.creador_id !== req.session._id) return 403...
-                // AHORA: Permitimos el paso. La seguridad visual (botones) la maneja el Frontend.
+                // Permitimos el paso. La seguridad visual (botones) la maneja el Frontend.
                 res.status(200).json(campana)
             } else {
                 res.status(404).json({message: "Campaña no encontrada"})
@@ -45,7 +44,7 @@ export function getCampanaById(req, res){
 
 /**
  * Crea una nueva campaña con los datos recibidos.
- * MODIFICADO: Captura explícitamente juego_id y jugadores del formulario.
+ * Captura explícitamente juego_id y jugadores del formulario.
  */
 export function createCampana(req, res){
     const campana = {
@@ -53,7 +52,6 @@ export function createCampana(req, res){
         sistema: req.body.sistema,
         descripcion: req.body.descripcion,
         imagen: req.body.imagen,
-        // NUEVOS CAMPOS:
         juego_id: req.body.juego_id, 
         jugadores: req.body.jugadores || [], // Array de IDs (opcional, default vacío)
         creador_id: req.session._id 
@@ -77,7 +75,7 @@ export function editarCampana(req, res){
 }
 
 /**
- * NUEVO: Invita a un jugador a la campaña.
+ * Invita a un jugador a la campaña.
  * Se espera el ID del jugador en el body (POST).
  */
 export function invitarJugador(req, res) {
@@ -90,7 +88,7 @@ export function invitarJugador(req, res) {
 }
 
 /**
- * NUEVO: Elimina a un jugador de la campaña.
+ * Elimina a un jugador de la campaña.
  * Se espera el ID del jugador en la URL (DELETE).
  */
 export function expulsarJugador(req, res) {

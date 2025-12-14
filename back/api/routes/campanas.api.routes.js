@@ -22,7 +22,7 @@ router.get("/:id", [validateToken, validateId], controllers.getCampanaById)
 router.post("/", [validateToken, validateCampana], controllers.createCampana)
 router.put("/:id", [validateToken, validateId, validateCampana], controllers.editarCampana)
 
-// Gestión de Jugadores (NUEVAS RUTAS)
+// Gestión de Jugadores
 // POST para invitar (el ID del jugador va en el body)
 router.post("/:id/invitar", [validateToken, validateId], controllers.invitarJugador)
 

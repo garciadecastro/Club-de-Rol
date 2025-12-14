@@ -7,7 +7,8 @@ const db = {
     collection: (name) => getDB().collection(name)
 }
 
-// CAMBIO: Definimos la clave directamente (Hardcoded) para no depender del .env
+// Definimos la clave directamente (Hardcoded) para no depender del .env
+// Cambio con respecto al parcial 2
 const SECRET_KEY = "clave_secreta_rolera" 
 
 /**

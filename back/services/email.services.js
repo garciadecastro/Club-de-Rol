@@ -1,3 +1,4 @@
+//Archivo: back/services/email.services.js
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
 
@@ -7,14 +8,14 @@ const transport = nodemailer.createTransport({
     secure: true,
     auth: {
         user: "carlosgarciadecastro@gmail.com",
-        pass: "tmldbardnvgmncrr" // Tu App Password (sin espacios)
+        pass: "tmldbardnvgmncrr" // App Password (sin espacios)
     }
 })
 
 export async function enviarMailRecuperacion(email){
     console.log("Intentando enviar email a: ", email)
     
-    // Usamos la clave "RECUPERAR" igual que el profesor
+    // Usamos la clave "RECUPERAR"
     const tokenEmail = jwt.sign({email}, "RECUPERAR", {expiresIn: "1h"})
 
     // URL hardcodeada a localhost

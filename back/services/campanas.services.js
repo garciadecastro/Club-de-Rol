@@ -16,7 +16,7 @@ export async function getCampanas(userId) {
 }
 
 /**
- * Obtiene TODAS las campañas activas (Mundo Abierto).
+ * Obtiene todas las campañas activas (Mundo Abierto).
  */
 export async function getCampanasPublicas() {
     return db.collection("campanas")
@@ -91,7 +91,7 @@ export async function agregarJugador(campanaId, jugadorId) {
 
     if (!campana) throw new Error("Campaña no encontrada")
     
-    // Validación de seguridad: Array existe? Límite alcanzado?
+    // Validación de seguridad
     const currentPlayers = campana.jugadores || []
     if (currentPlayers.length >= 6) {
         throw new Error("La campaña ya está completa (máximo 6 jugadores)")
@@ -124,7 +124,7 @@ export async function quitarJugador(campanaId, jugadorId) {
         { _id: new ObjectId(campanaId) },
         { 
             $pull: { jugadores: new ObjectId(jugadorId) },
-            $set: { completa: false } // Si sacamos a alguien, seguro deja de estar completa (o sigue incompleta)
+            $set: { completa: false } 
         }
     )
 }

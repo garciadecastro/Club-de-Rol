@@ -89,11 +89,10 @@ export async function obtenerJugadorPorId(id) {
 }
 
 /**
- * --- ESTA ES LA FUNCIÓN QUE FALTABA ---
  * Busca al usuario por email y le actualiza la contraseña (ya hasheada).
  */
 export async function cambiarPasswordPorEmail(email, password) {
-    // Importante: Encriptamos la nueva contraseña antes de guardarla
+    // Encriptamos la nueva contraseña antes de guardarla
     const hashedPassword = await bcrypt.hash(password, 10);
     
     await db.collection("jugadores").updateOne(

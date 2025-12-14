@@ -3,8 +3,7 @@ import { MongoClient } from 'mongodb';
 
 // -------------------------------------------------------------------------
 // URL DE CONEXIÓN A MONGODB ATLAS (NUBE)
-// He puesto tu usuario 'admin' y la contraseña 'rol1234'.
-// Si cambiaste la contraseña, edita donde dice 'rol1234' por la tuya.
+// Usuario 'admin' y la contraseña 'rol12345'
 // -------------------------------------------------------------------------
 const url = "mongodb+srv://admin:rol12345@hibridas.3sxrdj2.mongodb.net/?appName=hibridas";
 

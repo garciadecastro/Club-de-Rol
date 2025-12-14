@@ -34,7 +34,7 @@ app.use(express.json()); // Permite recibir JSON en el body de las peticiones
  * Asegura que la DB esté conectada antes de escuchar peticiones.
  */
 async function startServer() {
-    // 1. Conectamos la BD
+    // 1. Conectamos la DB
     await connectDB();
 
     // 2. Activamos Swagger (si aplica)

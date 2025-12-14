@@ -19,8 +19,7 @@ router.get("/publicos", controllers.getJugadoresPublicos);
 router.put("/:id", [validateToken], controllers.actualizar);
 router.delete("/:id", [validateToken], controllers.eliminar);
 
-// NUEVO: Ver perfil público de un jugador específico
-// Debe ir al final o después de "/publicos" para no confundir rutas
+// Ver perfil público de un jugador específico
 router.get("/:id", [validateToken], controllers.getJugadorById);
 
 export default router;

@@ -3,13 +3,12 @@ import yup from 'yup'
 
 /**
  * Esquema de validación para el REGISTRO de usuarios.
- * Incluye reglas complejas para la contraseña (regex).
+ * Incluye reglas para la contraseña (regex).
  */
 export const jugadoresSchema = yup.object({
-    // Agrego nombre porque tu controlador lo pide para registrar
+    // Agrega nombre porque lo controlador lo pide para registrar
     nombre: yup.string().required("El nombre es un campo requerido").min(3, "El nombre debe tener al menos 3 caracteres"),
 
-    // El resto es idéntico a tu modelo
     email: yup.string().email("Debe ser un mail valido").typeError("Debe ser un mail valido").required("El email es requerido"),
     
     password: yup.string().required("La contraseña es requerida").min(8, "La contraseña debe tener al menos 8 caracteres")

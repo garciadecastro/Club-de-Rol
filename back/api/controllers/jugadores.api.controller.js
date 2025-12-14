@@ -48,7 +48,7 @@ export async function restablecerPassword(req, res) {
     const { token, password } = req.body;
 
     try {
-        // CORRECCIÓN: Usamos la clave "RECUPERAR" para coincidir con el email service
+        // Usamos la clave "RECUPERAR" para coincidir con el email service
         const payload = jwt.verify(token, "RECUPERAR"); 
         
         if (!payload.email) {
