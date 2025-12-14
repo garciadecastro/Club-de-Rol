@@ -37,7 +37,6 @@ export function createCampana(campana) {
 
 /**
  * Edita una campaña existente.
- * CORRECCIÓN: Renombrado de 'editCampana' a 'editarCampana' para coincidir con el import.
  */
 export function editarCampana(id, campana) {
     return call({ uri: 'campanas/' + id, method: 'PUT', body: campana })
@@ -50,10 +49,6 @@ export function editarCampana(id, campana) {
 export function deleteCampana(id) {
     return call({ uri: 'campanas/' + id, method: 'DELETE' })
 }
-
-// ----------------------------------------------------
-// NUEVAS FUNCIONES (Las que faltaban y daban error)
-// ----------------------------------------------------
 
 /**
  * Invita a un jugador a la campaña.

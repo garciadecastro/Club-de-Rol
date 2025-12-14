@@ -25,7 +25,7 @@ import Error404 from './pages/Error404.jsx'
 import RecuperarCuenta from './pages/RecuperarCuenta.jsx'
 import RestablecerContrasenia from './pages/RestablecerContrasenia.jsx'
 
-// --- NUEVAS PÁGINAS CRUD ---
+// --- PÁGINAS CRUD ---
 import JuegosNuevo from './pages/JuegosNuevo.jsx'
 import JuegosEditar from './pages/JuegosEditar.jsx'
 import JuegosDetalle from './pages/JuegosDetalle.jsx'
@@ -34,7 +34,7 @@ import EditarCampana from './pages/EditarCampana.jsx'
 // --- PÁGINAS DE EXPLORACIÓN Y COMUNIDAD ---
 import ExplorarCampanas from './pages/ExplorarCampanas.jsx' 
 import ExplorarJugadores from './pages/ExplorarJugadores.jsx' 
-import PerfilPublico from './pages/PerfilPublico.jsx' // <--- IMPORTANTE: Importar la nueva página
+import PerfilPublico from './pages/PerfilPublico.jsx' 
 
 /**
  * Configuración de las Rutas (React Router DOM v6).
@@ -45,21 +45,20 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <Error404 />,
     children: [
-      // --- RUTAS PÚBLICAS (Cualquiera puede entrar) ---
+      // --- RUTAS PÚBLICAS  ---
       { path: "/", element: <Home /> },
       { path: "/login", element: <Login /> },
       { path: "/registro", element: <Register /> },
       { path: "/recuperar-cuenta", element: <RecuperarCuenta /> },
       { path: "/restablecer-contrasenia/:token", element: <RestablecerContrasenia /> },
 
-      // --- RUTAS PRIVADAS (Requieren Login) ---
+      // --- RUTAS PRIVADAS  ---
       
       // Gestión de Perfil Personal
       { path: "/perfil", element: <ProtectedRoute element={<Perfil />} /> },
       { path: "/perfil/editar", element: <ProtectedRoute element={<PerfilEditar />} /> },
 
       // Perfil Público de Otros Jugadores (Hoja de Aventurero)
-      // Esta ruta coincide con el link en ExplorarJugadores (`/jugadores/${id}`)
       { path: "/jugadores/:id", element: <ProtectedRoute element={<PerfilPublico />} /> },
 
       // Gestión de Campañas (CRUD)

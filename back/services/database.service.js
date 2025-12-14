@@ -6,7 +6,7 @@ import { MongoClient } from 'mongodb';
 // He puesto tu usuario 'admin' y la contraseña 'rol1234'.
 // Si cambiaste la contraseña, edita donde dice 'rol1234' por la tuya.
 // -------------------------------------------------------------------------
-const url = "mongodb+srv://admin:rol1234@hibridas.3sxrdj2.mongodb.net/?appName=hibridas";
+const url = "mongodb+srv://admin:rol12345@hibridas.3sxrdj2.mongodb.net/?appName=hibridas";
 
 // NOMBRE DE TU BASE DE DATOS
 const dbName = "AH20232CP1"; 

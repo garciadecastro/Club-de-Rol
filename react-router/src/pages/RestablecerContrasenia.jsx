@@ -1,3 +1,4 @@
+//Archivo: react-router/src/pages/RestablecerContrasenia.jsx
 import React, { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { restablecerContrasenia } from '../services/jugadores.services'
@@ -38,7 +39,7 @@ const RestablecerContrasenia = () => {
             
             setMensaje("¡Contraseña restaurada con éxito! Redirigiendo...")
             
-            // Redirigir al login después de 2 segundos
+            // Redirigir al login
             setTimeout(() => {
                 navigate("/login")
             }, 2500)

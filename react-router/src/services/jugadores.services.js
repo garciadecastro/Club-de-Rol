@@ -51,7 +51,7 @@ export function getJugadorById(id) {
     })
 }
 
-// --- FUNCIONES NUEVAS PARA RECUPERAR CONTRASEÑA ---
+// --- FUNCIONES PARA RECUPERAR CONTRASEÑA ---
 
 /**
  * 1. Solicita el envío del correo de recuperación.
@@ -68,7 +68,6 @@ export function recuperarCuenta(email) {
 /**
  * 2. Envía el token y la nueva contraseña para restablecerla.
  * Llama a POST /api/jugadores/restablecer-contrasenia
- * IMPORTANTE: Aquí enviamos el token que pide el backend.
  */
 export function restablecerContrasenia(token, nuevaPassword) {
     return call({

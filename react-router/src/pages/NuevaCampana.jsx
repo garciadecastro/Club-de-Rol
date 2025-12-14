@@ -1,8 +1,8 @@
 //Archivo: react-router/src/pages/NuevaCampana.jsx
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import Activity from '../components/Activity' // IMPORT CORRECTO
-import FormCampana from '../components/FormCampana' // IMPORT CORRECTO
+import Activity from '../components/Activity' 
+import FormCampana from '../components/FormCampana' 
 import { createCampana } from '../services/campanas.services'
 import { useUsuario } from '../contexts/SessionContext'
 
@@ -20,11 +20,11 @@ const NuevaCampana = () => {
         return Object.keys(error).length === 0
     }
 
-    // Recibe DATA, no EVENTO
+    // Recibe DATA
     const handleSubmit = (data) => {
         const payload = {
             ...data,
-            sistema: "Sistema Automático", // Backend lo rellenará o validará
+            sistema: "Sistema Automático", 
             creador_id: usuario?._id
         }
 

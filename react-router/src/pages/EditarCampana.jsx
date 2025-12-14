@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { editarCampana } from '../services/campanas.services'
 import { useCampana } from '../hooks/useCampanas'
-import Activity from '../components/Activity' // IMPORT CORRECTO
-import FormCampana from '../components/FormCampana' // IMPORT CORRECTO
+import Activity from '../components/Activity' 
+import FormCampana from '../components/FormCampana' 
 
 const EditarCampana = () => {
     const { id } = useParams()
@@ -22,10 +22,10 @@ const EditarCampana = () => {
         return Object.keys(error).length === 0
     }
 
-    // Recibe DATA, no EVENTO
+    // Recibe DATA
     const handleSubmit = (data) => {
         setLoadingSubmit(true)
-        // Mantenemos la estructura consistente
+        
         const payload = {
             titulo: data.titulo,
             descripcion: data.descripcion,

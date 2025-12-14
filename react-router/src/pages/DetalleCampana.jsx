@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom' 
 import { useCampana } from '../hooks/useCampanas'
-import { deleteCampana, expulsarJugador } from '../services/campanas.services' // IMPORTANTE: expulsarJugador
+import { deleteCampana, expulsarJugador } from '../services/campanas.services'
 import { useJuegos } from '../hooks/useJuegos' 
 import { getJugadoresPublicos } from '../services/jugadores.services'
 import { useUsuario } from '../contexts/SessionContext'
@@ -13,7 +13,6 @@ const DetalleCampana = () => {
     const usuario = useUsuario()
     
     // Necesitamos setCampana para actualizar la UI tras expulsar sin recargar
-    // Si tu hook useCampana no retorna setCampana, tendrás que usar window.location.reload()
     const { campana, loading, error, setCampana } = useCampana(id) 
     const { juegos } = useJuegos()
     const [allPlayers, setAllPlayers] = useState([])

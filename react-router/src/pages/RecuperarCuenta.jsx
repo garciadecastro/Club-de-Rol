@@ -1,6 +1,6 @@
+//Archivo: react-router/src/pages/RecuperarCuenta.jsx
 import { useState } from "react"
 import Activity from '../components/Activity'
-// CORRECCIÓN: Importamos desde jugadores.services, donde creamos la función
 import { recuperarCuenta } from "../services/jugadores.services" 
 import { Link } from "react-router-dom"
 
@@ -8,7 +8,7 @@ const RecuperarCuenta = () => {
     const [email, setEmail] = useState("")
     const [success, setSuccess] = useState(false)
     const [error, setError] = useState("")
-    const [loading, setLoading] = useState(false) // Añadido estado de carga
+    const [loading, setLoading] = useState(false) 
 
     const handleRecuperar = async () => {
         setError("")

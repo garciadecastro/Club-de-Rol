@@ -6,7 +6,7 @@ import { getJugadoresPublicos } from '../services/jugadores.services';
 /**
  * Página: La Taberna (Lista de Jugadores)
  * Muestra un listado de todos los miembros del Club.
- * ACTUALIZADO: Las tarjetas ahora son enlaces al perfil público.
+ * Las tarjetas son enlaces al perfil público.
  */
 const ExplorarJugadores = () => {
     const [jugadores, setJugadores] = useState([]);

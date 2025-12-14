@@ -1,64 +1,87 @@
 # CLUB DE ROL - GESTIÓN DE AVENTURAS ÉPICAS
 
-Este proyecto es una aplicación Full Stack desarrollada bajo el paradigma **SOA (Service-Oriented Architecture)**, utilizando React en el Frontend y Node.js/Express con MongoDB en el Backend, con el objetivo de gestionar las campañas, recursos y miembros de un club de rol.
+Este proyecto es una aplicación Full Stack desarrollada bajo el paradigma **SOA (Service-Oriented Architecture)**, utilizando React en el Frontend y Node.js/Express con MongoDB en el Backend. Su objetivo principal es ofrecer una plataforma para gestionar campañas de rol, administrar recursos de juego y facilitar la interacción entre jugadores.
 
 ---
 
-## cumplimiento de Requisitos (Segundo Parcial)
+## Cumplimiento de Requisitos (Entrega Final)
 
-| **Autenticación (JWT)** | [cite_start]Uso de JSON Web Tokens (JWT) para proteger todas las rutas privadas[cite: 1].
-| **Encriptación** | [cite_start]Contraseñas protegidas mediante `bcrypt`
-| **Arquitectura de Capas** | [cite_start]Backend dividido en Router, Controller, Service y Middleware
-| **Middleware de Autorización**| [cite_start]`validateToken` verifica la sesión JWT antes de acceder a datos sensible
-| **CRUD & Data** | [cite_start]CRUD completo (Crear, Leer, Editar, Eliminar) sobre **Campañas** y **Juegos** 
-| **Entidades Relacionadas** | [cite_start]Modelos `Campañas`, `Juegos`, `Jugadores`, `Partidas`, `Comentarios`
-| **Estado Global** | [cite_start]Uso de **Context API** y **Custom Hooks** (`useCampanas`, `useJuegos`) para manejar el estado del usuario[cite: 1]. 
-| **Validación** | [cite_start]Validación de formularios en Frontend y Backend (Middleware y YUP Schemas)
-| **Funcionalidad Extra**| [cite_start]Flujo completo de **Recuperación de Contraseña** vía email (`Nodemailer`)
-| **Privacidad**| [cite_start]Las campañas son gestionadas de manera privada por el usuario autenticado[cite: 1]
+Este proyecto abarca funcionalidades avanzadas de gestión de datos, seguridad y relaciones entre entidades:
+
+| Característica | Descripción Técnica |
+
+| **Autenticación (JWT)** | Uso de JSON Web Tokens (JWT) para proteger rutas privadas y mantener la sesión del usuario. |
+| **Seguridad & Encriptación** | Contraseñas protegidas mediante `bcrypt`. Middleware de seguridad para validar tokens antes de acceder a recursos sensibles. |
+| **Arquitectura SOA** | Backend estructurado en capas: **Router** (Rutas), **Controller** (Lógica HTTP), **Service** (Lógica de Negocio) y **Middleware**. |
+| **Gestión de Campañas** | **CRUD Completo**: Crear, Leer, Editar y Eliminar campañas. Sistema para **añadir jugadores** a campañas activas (unirse a la aventura). |
+| **Perfiles de Usuario** | Visualización de **Perfiles Públicos** de otros jugadores y gestión privada del propio perfil. |
+| **Recuperación de Cuenta** | Flujo completo de **Recuperación de Contraseña** vía Email (`Nodemailer`) con generación de tokens temporales de un solo uso. |
+| **Estado Global** | Uso de **Context API** (`SessionContext`) y **Custom Hooks** para manejar la sesión y los datos en el Frontend. |
+| **Base de Datos** | MongoDB con relaciones entre colecciones: `Campañas` vinculadas a `Jugadores` y `Juegos`. |
+
+---
 
 ## Arquitectura y Tecnologías
 
-El proyecto se estructura en dos repositorios/carpetas principales que se comunican a través de una API REST protegida.
+El proyecto se estructura en dos repositorios principales que se comunican a través de una API REST.
 
-| **`back`** | Node.js / Express (ESM) | API REST, Conexión a MongoDB, Encriptación, JWT, Manejo de `nodemailer`. |
-| **`react-router`** | React (Vite) / React Router DOM | Interfaz de usuario, Context API (`SessionContext`), Manejo de formularios y peticiones (`api.services.js`). |
-| **Estilo** | Tailwind CSS | Diseño **Neomedieval Moderno** (Slate/Amber). |
+### Backend (`/back`)
+* **Runtime:** Node.js
+* **Framework:** Express (ES Modules)
+* **Base de Datos:** MongoDB (Driver nativo y MongoDB Atlas)
+* **Librerías Clave:** `jsonwebtoken`, `bcrypt`, `nodemailer`, `cors`.
 
+### Frontend (`/react-router`)
+* **Framework:** React (Vite)
+* **Routing:** React Router DOM
+* **Estilo:** Tailwind CSS (Diseño "Dark Fantasy" con paleta Slate/Amber)
+* **Comunicación:** `fetch` con servicios modularizados (`api.services.js`).
 
-## Configuración e Instalación
+---
 
-### 1. Claves de Entorno (`.env`)
+## Instalación y Puesta en Marcha
 
-Cree un archivo llamado **`.env`** en la carpeta **`back/`** con las siguientes variables esenciales:
+El proyecto está pre-configurado para funcionar inmediatamente tras la instalación de dependencias, sin necesidad de configurar variables de entorno manualmente.
 
-```env
-# CRÍTICO PARA EL SERVIDOR
-PORT=2025
-MONGO_URI=mongodb+srv://user:pass@cluster.net/DB_NAME?retryWrites=true&w=majority
-DB_NAME=AH20232CP1
-JWT_SECRET=tu_clave_secreta_unica
+### 1. Instalación de Dependencias
 
-# CONFIGURACIÓN DE EMAIL (Obligatorio para la recuperación de contraseña)
-EMAIL_USER=tu_correo_de_envio@gmail.com
-EMAIL_PASS=tu_app_password_de_16_caracteres # Usar una App Password de Google
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=465
-EMAIL_SECURE=true
+Ejecuta los siguientes comandos desde la raíz del proyecto para instalar las librerías necesarias tanto en el servidor como en el cliente:
 
-# PASO 1: INSTALAR DEPENDENCIAS (UNA VEZ)
-cd back/
-npm install
-cd ../react-router/
+# Instalar dependencias del Backend
+cd back
 npm install
 
-# ----------------------------------------
+# Instalar dependencias del Frontend
+cd ../react-router
+npm install
 
-# TERMINAL 1: INICIAR BACKEND (API)
-cd back/
-npm run dev 
+### 2. Ejecución
+Es necesario tener dos terminales abiertas simultáneamente para levantar ambos servicios:
 
-# TERMINAL 2: INICIAR FRONTEND (REACT)
-cd react-router/
-npm run dev 
+# Terminal 1 (Backend):
+cd back
+npm run dev
+# El servidor iniciará en el puerto 2025 y conectará automáticamente a MongoDB Atlas.
+
+# Terminal 2 (Frontend):
+cd react-router
+npm run dev
 # Abrir http://localhost:5173 en el navegador.
+
+### 3. Funcionalidades Destacadas
+# Unirse a Campañas
+Los usuarios pueden explorar campañas creadas por otros Directores de Juego y solicitar unirse a ellas. El sistema actualiza la base de datos vinculando el ID del jugador a la lista de participantes de la campaña.
+
+# Perfiles Públicos
+Al hacer clic en el nombre de un jugador (en una campaña o comentario), se accede a una vista pública de su perfil (/jugadores/:id), mostrando su información básica sin comprometer datos sensibles como su email o contraseña.
+
+# Recuperación de Contraseña
+Si un usuario olvida su clave:
+
+Solicita la recuperación desde el Login.
+
+El Backend genera un token temporal (1 hora de validez) y envía un correo con un enlace único a su email.
+
+El usuario accede al enlace, define su nueva contraseña y el sistema la actualiza encriptada en la base de datos.
+
+Autor: Carlos García de Castro Materia: Aplicaciones Híbridas - Final
